@@ -2,6 +2,7 @@
 
 ### Introduction
 This guide shows you how to use **CC-Jupyter-Service** to execute jupyter notebooks. It will show you how to use external data in you notebook and how to specify Hardware and Software requirements.
+
 It is written for students or employees of the HTW Berlin.
 
 ### Prerequisites
@@ -11,7 +12,9 @@ CC-Jupyter-Service enables you to execute jupyter notebooks. Therefor it is requ
 #### CC-Agency-Account
 CC-Jupyter-Service uses *CC-Agency* for authorization and execution of the notebooks. Therefor it is required to have access to a CC-Agency installation. You will need the **URL** of the agency and
 a valid **Username** and **Password** combination.
+
 You can test whether you have access to an agency by accessing "*agencyUrl*/nodes" with your browser. You will be asked for username/password.
+
 If you cannot access the agency it may be required to access it via VPN (See [this](https://anleitungen.rz.htw-berlin.de/de/vpn/) guide on how to setup VPN at the HTW Berlin).
 
 #### Access to an CC-Jupyter-Service installation
@@ -24,4 +27,5 @@ CC-Jupyter-Service executes your notebooks using docker. If you have special sof
 
 #### Storage Server (optional)
 If you want to use external data in your jupyter notebook you need SSH access on a SSH server, that is accessible inside the HTW Network.
+
 Via VPN you should be able to access it using `ssh myusername@ssh-server-name` in a terminal.
