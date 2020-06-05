@@ -33,4 +33,5 @@ Via VPN you should be able to access it using `ssh myusername@ssh-server-name` i
 ## Login Page
 The login page is the first page you see, when accessing CC-Jupyter-Service with your browser. You can access the HTW installation [here](https://avocado01.f4.htw-berlin.de/ccjupyterservice).
 
-![Login Page](https://github.com/curious-containers/cc-jupyter-service.github.io/blob/master/images/login_page.png?raw=true)
+images/login.png
+![Login Page](images/login.png)
