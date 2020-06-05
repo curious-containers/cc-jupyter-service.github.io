@@ -42,4 +42,4 @@ If you are a student at the HTW you should probably select `https://agency.f4.ht
 ## Execution Page
 If you have logged in successfully you see the execution page.
 
-<img src="images/execution.png">
+<img src="images/execution.png" width=350px height=652px>
