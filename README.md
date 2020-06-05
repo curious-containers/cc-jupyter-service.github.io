@@ -34,7 +34,6 @@ Via VPN you should be able to access it using `ssh myusername@ssh-server-name` i
 The login page is the first page you see, when accessing CC-Jupyter-Service with your browser. You can access the HTW installation [here](https://avocado01.f4.htw-berlin.de/ccjupyterservice).
 
 ![Login Page](https://media.githubusercontent.com/media/curious-containers/cc-jupyter-service.github.io/master/images/login.png)
-[//]: # (<img src="images/login.png" width=479px height=398px>)
 
 Here you need the agency URL and your username/password combination of your agency account.
 
@@ -44,4 +43,3 @@ If you are a student at the HTW you should probably select `https://agency.f4.ht
 If you have logged in successfully you see the execution page.
 
 ![Execution Page](https://media.githubusercontent.com/media/curious-containers/cc-jupyter-service.github.io/master/images/execution.png)
-[//]: # (<img src="images/execution.png" width=350px height=652px>)
