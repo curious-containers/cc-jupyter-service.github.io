@@ -1,11 +1,11 @@
-## Welcome to the CC-Jupyter-Service documentation
+# Welcome to the CC-Jupyter-Service documentation
 
-### Introduction
+## Introduction
 This guide shows you how to use **CC-Jupyter-Service** to execute jupyter notebooks. It will show you how to use external data in you notebook and how to specify Hardware and Software requirements.
 
 It is written for students or employees of the HTW Berlin.
 
-### Prerequisites
+## Prerequisites
 #### Jupyter Notebook
 CC-Jupyter-Service enables you to execute jupyter notebooks. Therefor it is required to **write and save a jupyter notebook** on your machine (or at least you need access to a notebook file).
 
@@ -29,3 +29,53 @@ CC-Jupyter-Service executes your notebooks using docker. If you have special sof
 If you want to use external data in your jupyter notebook you need SSH access on a SSH server, that is accessible inside the HTW Network.
 
 Via VPN you should be able to access it using `ssh myusername@ssh-server-name` in a terminal.
+
+## Login Page
+The login page is the first page you see, when accessing CC-Jupyter-Service with your browser. You can access the HTW installation [here](avocado01.f4.htw-berlin.de/ccjupyterservice).
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/ccjupyterservice/static/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Login</h2>
+    <form method='Post'>
+        
+            <div class="col-xs-5">
+                <label for="agencyUrl">Agency URL</label>
+                <select class="form-control" name="agencyUrl" id="agencyUrl">
+                    
+                        <option>https://agency.f4.htw-berlin.de/dt</option>
+                    
+                        <option>https://agency.f4.htw-berlin.de/cctest</option>
+                    
+                        <option>https://agency.f4.htw-berlin.de/cc</option>
+                    
+                </select>
+            </div>
+        
+        <div class="form-group">
+            <label for="agencyUsername">Agency-Username</label>
+            <input class="form-control" placeholder="Agency-Username" name="agencyUsername" id="agencyUsername" required>
+        </div>
+        <div>
+            <label for="agencyPassword">Agency-Password</label>
+            <input class="form-control" placeholder="Agency-Password" type="password" name="agencyPassword" id="agencyPassword" required>
+        </div>
+        <br>
+        <input type="submit" class="btn btn-primary" value="Login">
+    </form>
+</div>
+
+</body>
+</html>
+```
