@@ -161,18 +161,18 @@ To make your image work with CC-Jupyter-Service add the following code snippets 
 
 ### Install python3, pip, papermill, ipykernel
 First of all make sure python3 and pip is installed:
-```
+```Dockerfile
 RUN apt-get update && apt-get install -y python3 && pip3 install --upgrade pip
 ```
 
 CC-Jupyter-Service uses papermill to execute our notebook, so we have to install it.
-```
+```Dockerfile
 RUN pip3 install ipykernel && python3 -m ipykernel install --user && pip install papermill
 ```
 
 ### Install Red-Connectors
 Next we have to install some programs that manage file transfers for us.
-```
+```Dockerfile
 RUN pip3 install red-connector-ssh red-connector-http
 ```
 The `red-connector-http` package is required and your image will not work without it.
@@ -180,14 +180,14 @@ The `red-connector-http` package is required and your image will not work withou
 The `red-connector-ssh` is only required, if you want to enable External Data via SSH.
 If you want to use the `mount` option when using ssh you also have to install `sshfs`:
 
-```
+```Dockerfile
 RUN apt-get install -y sshfs
 ```
 
 ### cc User
 Also we have to create a user with uid 1000.
 
-```
+```Dockerfile
 RUN useradd -ms /bin/bash cc
 USER cc
 ```
@@ -195,7 +195,7 @@ USER cc
 ### Install papermill-wrapper
 CC-Jupyter-Service executes papermill not directly but calls a wrapper program called `papermill_wrapper.py`. This wrapper is part of the CC-Jupyter-Service implementation, so we
 can access it directly via the CC-Jupyter-Service github repository:
-```
+```Dockerfile
 RUN mkdir -p "/home/cc/.local/bin" \
 		&& curl https://raw.githubusercontent.com/curious-containers/cc-jupyter-service/master/cc_jupyter_service/papermill_wrapper.py > /home/cc/.local/bin/papermill_wrapper.py \
 		&& chmod u+x /home/cc/.local/bin/papermill_wrapper.py
@@ -207,7 +207,7 @@ Also make sure to give execution permissions (with `chmod`).
 Like stated earlier we have to add `/home/cc/.local/bin/` to our `$PATH` to make the `papermill_wrapper.py` visible to the system.
 Also we define some environment variables to prevent encoding issues.
 
-```
+```Dockerfile
 ENV PATH="/home/cc/.local/bin:${PATH}"
 ENV LC_ALL="C.UTF-8"
 ENV LANG="C.UTF-8"
