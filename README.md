@@ -80,7 +80,7 @@ We should login to this SSH-Server via SSH and create the data we want to access
 In this example we will create a directory `test_directory` containing the files `test_file1.txt` and `test_file2.txt`.
 
 ```bash
-ssh <username>@<my-storage-server.f4.htw-berlin.de>
+ssh username@my-storage-server.f4.htw-berlin.de
 
 # inside ssh
 echo $HOME  # for example gives: /home/username
@@ -136,4 +136,78 @@ To run our notebook we click on the Execute-Button. This will start the executio
 
 ## Result Page
 
-Todo
+The result page lists the executed notebooks and some meta information.
+
+![Result Page](https://media.githubusercontent.com/media/curious-containers/cc-jupyter-service.github.io/master/images/result.png)
+
+On the left side we can see the filename of our jupyter notebook. Next to it we see the execution status. There are four possible values for this.
+Notebooks in state `processing` are currently processed. We can update their status by clicking on Results tab of the top navigation bar.
+If everything worked as expected the notebook will have status `success`. Then we can click on the download button on the right side and view our executed notebook.
+If something went wrong the notebook will be in state `failed`. Then we can view some debug information hopefully saying something about the error that occurred.
+On the right side the we can cancel a processing notebook. This will lead to the state `cancelled`.
+
+If you want to execute another notebook we can switch back to the execution page by clicking on "Execution" at the top navigation bar.
+
+## Build your own docker Image
+
+Sometimes we need software that is not present in the predefined images. Than we can build our own docker image and execute our notebook using the new image.
+
+We are not going to cover how to build a docker image or what a dockerfile is.
+If you don't know docker take a look at the [Docker-Quickstart](https://docs.docker.com/get-started/part2/) and
+the [Dockerfile-Reference](https://docs.docker.com/engine/reference/builder/).
+
+There are some requirements that our docker image must met so it can be used within CC-Jupyter-Service.
+
+### Install python3, pip, papermill, ipykernel
+First of all make sure python3 and pip is installed:
+```
+RUN apt-get update && apt-get install -y python3 && pip3 install --upgrade pip
+```
+
+CC-Jupyter-Service uses papermill to execute our notebook, so we have to install it.
+```
+RUN pip3 install ipykernel && python3 -m ipykernel install --user && pip install papermill
+```
+
+### Install Red-Connectors
+Next we have to install some programs that manage file transfers for us.
+```
+RUN pip3 install red-connector-ssh red-connector-http
+```
+The `red-connector-http` package is required and your image will not work without it.
+
+The `red-connector-ssh` is only required, if you want to enable External Data via SSH.
+If you want to use the `mount` option when using ssh you also have to install `sshfs`:
+
+```
+RUN apt-get install -y sshfs
+```
+
+### cc User
+Also we have to create a user with uid 1000.
+
+```
+RUN useradd -ms /bin/bash cc
+USER cc
+```
+
+### Install papermill-wrapper
+CC-Jupyter-Service executes papermill not directly but calls a wrapper program called `papermill_wrapper.py`. This wrapper is part of the CC-Jupyter-Service implementation, so we
+can access it directly via the CC-Jupyter-Service github repository:
+```
+RUN mkdir -p "/home/cc/.local/bin" \
+		&& curl https://raw.githubusercontent.com/curious-containers/cc-jupyter-service/master/cc_jupyter_service/papermill_wrapper.py > /home/cc/.local/bin/papermill_wrapper.py \
+		&& chmod u+x /home/cc/.local/bin/papermill_wrapper.py
+```
+We place it at `/home/cc/.local/bin/papermill_wrapper.py`. Later we will add `/home/cc/.local/bin` to our `$PATH` Variable.
+Also make sure to give execution permissions (with `chmod`).
+
+### Environment Variables
+Like stated earlier we have to add `/home/cc/.local/bin/` to our `$PATH` to make the `papermill_wrapper.py` visible to the system.
+Also we define some environment variables to prevent encoding issues.
+
+```
+ENV PATH="/home/cc/.local/bin:${PATH}"
+ENV LC_ALL="C.UTF-8"
+ENV LANG="C.UTF-8"
+```
