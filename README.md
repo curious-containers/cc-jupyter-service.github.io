@@ -216,7 +216,7 @@ ENV LANG="C.UTF-8"
 ### Result
 Our final Dockerfile looks like this:
 
-```
+```bash
 FROM docker.io/deepprojects/cuda-sshfs:9.0-3.5.1
 
 RUN apt-get update \
