@@ -157,6 +157,7 @@ If you don't know docker take a look at the [Docker-Quickstart](https://docs.doc
 the [Dockerfile-Reference](https://docs.docker.com/engine/reference/builder/).
 
 There are some requirements that our docker image must met so it can be used within CC-Jupyter-Service.
+To make your image work with CC-Jupyter-Service add the following code snippets to your Dockerfile.
 
 ### Install python3, pip, papermill, ipykernel
 First of all make sure python3 and pip is installed:
@@ -211,3 +212,37 @@ ENV PATH="/home/cc/.local/bin:${PATH}"
 ENV LC_ALL="C.UTF-8"
 ENV LANG="C.UTF-8"
 ```
+
+### Result
+Our final Dockerfile looks like this:
+
+```
+FROM docker.io/deepprojects/cuda-sshfs:9.0-3.5.1
+
+RUN apt-get update \
+&& apt-get install -y python3 \
+&& pip3 install --upgrade pip
+
+# install connectors
+RUN pip3 install ipykernel && python3 -m ipykernel install --user && pip install papermill
+RUN pip3 install red-connector-ssh red-connector-http
+
+# create user
+RUN useradd -ms /bin/bash cc
+USER cc
+
+# install papermill wrapper
+RUN mkdir -p "/home/cc/.local/bin" \
+	&& curl https://raw.githubusercontent.com/curious-containers/cc-jupyter-service/master/cc_jupyter_service/papermill_wrapper.py > /home/cc/.local/bin/papermill_wrapper.py \
+	&& chmod u+x /home/cc/.local/bin/papermill_wrapper.py
+
+# set environment
+ENV PATH="/home/cc/.local/bin:${PATH}"
+ENV LC_ALL="C.UTF-8"
+ENV LANG="C.UTF-8"
+```
+
+We use the base image `docker.io/deepprojects/cuda-sshfs:9.0-3.5.1` here so we dont have to install sshfs ourselves.
+
+Now we can build our image using `docker build -t our-image-tag:latest .` and push it to docker hub `docker push our-image-tag:latest`.
+If we specify our image tag now by using "Custom Docker Image" in CC-Jupyter-Service now, our notebook will be executed within a container that used our new image.
