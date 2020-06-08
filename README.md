@@ -44,14 +44,14 @@ If you have logged in successfully you see the execution page.
 
 ![Execution Page](https://media.githubusercontent.com/media/curious-containers/cc-jupyter-service.github.io/master/images/execution.png)
 
-#### Jupyter Notebook
+### Jupyter Notebook
 As stated previously CC-Jupyter-Service executes a jupyter notebook. In the first section of the execution page you can drag and drop your jupyter notebook file.
 
 ![Jupyter Notebook](https://media.githubusercontent.com/media/curious-containers/cc-jupyter-service.github.io/master/images/notebook.png)
 
 Afterwards you can see the notebook file. To execute a different notebook remove the notebook by clicking the X-Button next to the notebook name.
 
-#### Dependencies
+### Dependencies
 CC-Jupyter-Service executes your notebook inside a docker container. If you don't need extra software you can simply select "Base Image". There is also a predefined "Tensorflow Image".
 
 There are two options in case you want python packages that are not installed in the predefined images.
@@ -62,11 +62,78 @@ The downside is that the python package is installed every time you execute the 
 **Option 2:** The more sophisticated approach is to build your own docker image. Afterwards you can choose this image by selecting "Custom Docker Image" and specifying your image tag.
 To make a docker image work under CC-Jupyter-Service there are some requirements. Read [TODO](#) for more information on how to build your own docker image for CC-Jupyter-Service.
 
-#### GPUs
+### GPUs
 For machine learning applications or image processing it is sometimes useful to use GPU-acceleration. For this purpose you can require one or more GPUs by clicking on the Plus-Button under GPUs.
 A new GPU-Entry should appear where you can select the amount of VRAM of this GPU. You can require as much GPUs as you like but if the cluster does not have the possibility to fullfill these
 requirements the execution of the notebook will fail.
 
 When using dt-agency you can select a maximum of two GPUs otherwise the execution will fail.
 
-#### External Data
+### External Data
+This section is a little bit more challenging, so we will work through an example.
+
+We can use this functionality if we want to use files or directories which are not present in the docker image
+or if you want to upload files or directories after the execution of the notebook.
+
+For this to work we need an SSH-Storage-Server that is reachable for the execution cluster (for dt-agency this is inside the HTW-Network) that we can access via SSH.
+We should login to this SSH-Server via SSH and create the data we want to access in your notebook.
+In this example we will create a directory `test_directory` containing the files `test_file1.txt` and `test_file2.txt`.
+
+```bash
+ssh <username>@<my-storage-server.f4.htw-berlin.de>
+
+# inside ssh
+echo $HOME  # for example gives: /home/username
+
+mkdir test_directory
+echo "content1" > $HOME/test_directory/test_file1.txt
+echo "content2" > $HOME/test_directory/test_file2.txt
+```
+
+Before editing the external data section in the CC-Jupyter-Service UI, we should prepare our notebook to work with the external data.
+Therefore add a new cell at the top of your notebook.
+
+```python
+my_input_directory = None
+```
+
+Make sure to add the `parameters` tag to the cell as described [here](https://github.com/nteract/papermill#parameterizing-a-notebook).
+
+This cell defines the input files and directories of our notebook.
+Instead of `None` we can also use other values.
+These values are overwritten by CC-Jupyter-Service and then contain the path to the file or directory that we want to specify now in the CC-Jupyter-Service UI.
+
+To specify which files or directories we want to use in our notebook we click at the Plus-Button in the "External Data" Section.
+The first thing we enter is name of our variable that we specified in our parameters cell (in this example `my_input_directory`).
+
+Then we have to choose between `File` and `Directory`. As `my_input_directory` is a directory we choose **Directory**.
+
+Next we choose the way how to transfer the files or directories to our notebook. Currently there is only one option **SSH**.
+
+Now there are some more fields to fill. The **Host** specifies the SSH-Storage-Server that we want to access.
+So we fill in the hostname of the storage server, in our example `my-storage-server.f4.htw-berlin.de`.
+
+Next we have to specify the path to the file or directory on our storage server that we want to use.
+In our example it would be `/home/username/test_directory`.
+
+Now the CC-Jupyter-Service knows where to find our data (host and path) and the parameter you want to define with it (in our example `my_input_directory`).
+But to access these files we need authentication information.
+So we have to supply our **Username** and **Password** combination we used to login into our SSH-Server.
+
+The last thing to specify is whether we want to copy our directory or to mount it. Most of the time mounting is faster and better, so we tick the checkbox.
+
+
+That's it. Now we can use this directory inside our notebook and list its content for example:
+
+```python
+import os
+
+print(os.listdir(my_input_directory))
+```
+
+### Execute
+To run our notebook we click on the Execute-Button. This will start the execution and takes us to the result page.
+
+## Result Page
+
+Todo
