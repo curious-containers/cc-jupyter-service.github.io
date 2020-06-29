@@ -67,7 +67,7 @@ For machine learning applications or image processing it is sometimes useful to 
 A new GPU-Entry should appear where you can select the amount of VRAM of this GPU. You can require as much GPUs as you like but if the cluster does not have the possibility to fullfill these
 requirements the execution of the notebook will fail.
 
-When using dt-agency you can select a maximum of two GPUs otherwise the execution will fail.
+When using dt-agency you can select only one GPU, otherwise the execution will fail.
 
 ### External Data
 This section is a little bit more challenging, so we will work through an example.
