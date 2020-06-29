@@ -114,7 +114,8 @@ Now there are some more fields to fill. The **Host** specifies the ssh-storage-S
 So we fill in the hostname of the storage server, in our example `my-storage-server.f4.htw-berlin.de`.
 
 Next we have to specify the path to the file or directory on our storage server that we want to use.
-In our example it would be `/home/username/test_directory`.
+In our example it would be `/home/username/test_directory`. We can also use the relative path `test_directory`, which will be interpreted relative to our home directory.
+Do not use `~` or environment variables.
 
 Now the CC-Jupyter-Service knows where to find our data (host and path) and the parameter you want to define with it (in our example `my_input_directory`).
 But to access these files we need authentication information.
