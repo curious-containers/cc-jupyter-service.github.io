@@ -75,7 +75,7 @@ This section is a little bit more challenging, so we will work through an exampl
 We can use this functionality if we want to use files or directories which are not present in the docker image
 or if you want to upload files or directories after the execution of the notebook.
 
-For this to work we need an SSH-Storage-Server that is reachable for the execution cluster (for dt-agency this is inside the HTW-Network) that we can access via SSH.
+For this to work we need an ssh-storage-Server that is reachable for the execution cluster (for dt-agency this is inside the HTW-Network) that we can access via SSH.
 We should login to this SSH-Server via SSH and create the data we want to access in your notebook.
 In this example we will create a directory `test_directory` containing the files `test_file1.txt` and `test_file2.txt`.
 
@@ -110,7 +110,7 @@ Then we have to choose between `File` and `Directory`. As `my_input_directory` i
 
 Next we choose the way how to transfer the files or directories to our notebook. Currently there is only one option **SSH**.
 
-Now there are some more fields to fill. The **Host** specifies the SSH-Storage-Server that we want to access.
+Now there are some more fields to fill. The **Host** specifies the ssh-storage-Server that we want to access.
 So we fill in the hostname of the storage server, in our example `my-storage-server.f4.htw-berlin.de`.
 
 Next we have to specify the path to the file or directory on our storage server that we want to use.
@@ -130,6 +130,19 @@ import os
 
 print(os.listdir(my_input_directory))
 ```
+
+Another advantage of mounting the directory is that we can create new files inside our directory, which will be present on our SSH-Server afterwards.
+We could for example create a file in our notebook:
+
+```python
+import os
+
+new_path = os.path.join(my_input_directory, 'my_new_file.txt')
+with open(new_path, 'w') as f:
+    f.write('This is some new content')
+```
+
+If we mount `my_input_directory` the file `my_new_file.txt` will be created on our ssh-storage-server, so we can use it after the notebook execution finished.
 
 ### Execute
 To run our notebook we click on the Execute-Button. This will start the execution and takes us to the result page.
