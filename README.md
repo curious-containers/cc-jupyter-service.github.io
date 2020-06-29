@@ -86,8 +86,8 @@ ssh username@my-storage-server.f4.htw-berlin.de
 echo $HOME  # for example gives: /home/username
 
 mkdir test_directory
-echo "content1" > $HOME/test_directory/test_file1.txt
-echo "content2" > $HOME/test_directory/test_file2.txt
+echo "content1" > test_directory/test_file1.txt
+echo "content2" > test_directory/test_file2.txt
 ```
 
 Before editing the external data section in the CC-Jupyter-Service UI, we should prepare our notebook to work with the external data.
