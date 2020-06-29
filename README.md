@@ -23,7 +23,7 @@ VPN.
 
 #### Docker (optional)
 CC-Jupyter-Service executes your notebooks using docker. If you have special software requirements, you may need to
-[build your own docker image](https://docs.docker.com/engine/reference/commandline/build/).
+[build your own docker image](#Build your own docker Image).
 
 #### Storage Server (optional)
 If you want to use external data in your jupyter notebook you need SSH access on a SSH server, that is accessible inside the HTW Network.
@@ -60,7 +60,7 @@ There are two options in case you want python packages that are not installed in
 The downside is that the python package is installed every time you execute the notebook. Also this does not work, if you want to install software not based on python.
 
 **Option 2:** The more sophisticated approach is to build your own docker image. Afterwards you can choose this image by selecting "Custom Docker Image" and specifying your image tag.
-To make a docker image work under CC-Jupyter-Service there are some requirements. Read [TODO](#) for more information on how to build your own docker image for CC-Jupyter-Service.
+To make a docker image work under CC-Jupyter-Service there are some requirements. Read [this](#Build your own docker Image) for more information on how to build your own docker image for CC-Jupyter-Service.
 
 ### GPUs
 For machine learning applications or image processing it is sometimes useful to use GPU-acceleration. For this purpose you can require one or more GPUs by clicking on the Plus-Button under GPUs.
