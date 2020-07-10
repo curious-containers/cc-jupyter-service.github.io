@@ -33,7 +33,7 @@ Via VPN you should be able to access it using `ssh myusername@ssh-server-name` i
 
 ## Login Page
 The login page is the first page you see, when accessing CC-Jupyter-Service with your browser. You can access the HTW installation at
-[https://avocado01.f4.htw-berlin.de/ccjupyterservice/auth/login](https://avocado01.f4.htw-berlin.de/ccjupyterservice/auth/login).
+[https://avocado01.f4.htw-berlin.de/ccjupyterservice](https://avocado01.f4.htw-berlin.de/ccjupyterservice).
 
 <img src="https://media.githubusercontent.com/media/curious-containers/cc-jupyter-service.github.io/master/images/login.png" alt="Login Page" width="377px" height="408px">
 
@@ -54,15 +54,26 @@ As stated previously CC-Jupyter-Service executes a jupyter notebook. In the firs
 Afterwards you can see the notebook file. To execute a different notebook remove the notebook by clicking the X-Button next to the notebook name.
 
 ### Dependencies
-CC-Jupyter-Service executes your notebook inside a docker container. If you don't need extra software you can simply select "Base Image". There is also a predefined "Tensorflow Image".
+CC-Jupyter-Service executes your notebook inside a docker container. If you don't need extra software you can simply select "Base Image".
+There is also a predefined "Tensorflow Image" and a "Pytorch Image".
 
-There are two options in case you want python packages that are not installed in the predefined images.
+There are two options in case you want to use software that is not installed in the predefined images.
 
-**Option 1:** You can use `!pip install <package>` inside your notebook to install a python package while executing the notebook. This is relatively easy to implement.
-The downside is that the python package is installed every time you execute the notebook. Also this does not work, if you want to install software not based on python.
+**Option 1:** The first approach is easier but slower and less flexible. CC-Jupyter-Service allows you to specify a [requirements.txt](https://pip.pypa.io/en/stable/user_guide/#requirements-files)
+file that will be installed before the execution of your notebook.
+The downside is that the python packages are installed every time you execute the notebook, which slows down the execution.
+Also this does not work, if you want to install software not available through pip.
 
-**Option 2:** The more sophisticated approach is to build your own docker image. Afterwards you can choose this image by selecting "Custom Docker Image" and specifying your image tag.
-To make a docker image work under CC-Jupyter-Service there are some requirements. Read [this](#build-your-own-docker-image) for more information on how to build your own docker image for CC-Jupyter-Service.
+You can use `pip freeze > requirements.txt` to create a requirements.txt file that lists all your local installed packages or write the requirements.txt by hand.
+For example:
+```
+tqdm==4.42.1
+paramiko==2.7.1
+```
+
+**Option 2:** The faster but more complex way is to build your own docker image. Afterwards you can choose this image by selecting "Custom Docker Image" and specifying your image tag.
+This method is very flexible as any software can be installed, but there are some requirements to make your docker image work under CC-Jupyter-Service.
+Read [this](#build-your-own-docker-image) for more information on how to build your own docker image for CC-Jupyter-Service.
 
 ### GPUs
 For machine learning applications or image processing it is sometimes useful to use GPU-acceleration. For this purpose you can require one or more GPUs by clicking on the Plus-Button under GPUs.
