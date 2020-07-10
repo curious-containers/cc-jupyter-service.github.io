@@ -88,15 +88,15 @@ This section is a little bit more challenging, so we will work through an exampl
 We can use this functionality if we want to use files or directories which are not present in the docker image
 or if you want to upload files or directories after the execution of the notebook.
 
-For this to work we need an ssh-storage-Server that is reachable for the execution cluster (for dt-agency this is inside the HTW-Network) that we can access via SSH.
+For this to work we need an ssh-storage-server that is reachable for the execution cluster (for dt-agency you could use the dt1.f4.htw-berlin.de storage server) that we can access via SSH.
 We should login to this SSH-Server via SSH and create the data we want to access in your notebook.
 In this example we will create a directory `test_directory` containing the files `test_file1.txt` and `test_file2.txt`.
 
 ```bash
-ssh username@my-storage-server.f4.htw-berlin.de
+ssh s0000000@dt1.f4.htw-berlin.de
 
 # inside ssh
-echo $HOME  # for example gives: /home/username
+echo $HOME  # for example gives: /home/s0000000
 
 mkdir test_directory
 echo "content1" > test_directory/test_file1.txt
@@ -116,23 +116,23 @@ This cell defines the input files and directories of our notebook.
 Instead of `None` we can also use other values.
 These values are overwritten by CC-Jupyter-Service and then contain the path to the file or directory that we want to specify now in the CC-Jupyter-Service UI.
 
-To specify which files or directories we want to use in our notebook we click at the Plus-Button in the "External Data" Section.
+To specify which files or directories we want to use in our notebook we click at the plus-button in the "External Data" section.
 The first thing we enter is name of our variable that we specified in our parameters cell (in this example `my_input_directory`).
 
-Then we have to choose between `File` and `Directory`. As `my_input_directory` is a directory we choose **Directory**.
+Then we have to choose between `File`, `Directory` and some other possible types. As `my_input_directory` is a directory we choose **Directory**.
 
 Next we choose the way how to transfer the files or directories to our notebook. Currently there is only one option **SSH**.
 
-Now there are some more fields to fill. The **Host** specifies the ssh-storage-Server that we want to access.
-So we fill in the hostname of the storage server, in our example `my-storage-server.f4.htw-berlin.de`.
+Now there are some more fields to fill. The **Host** specifies the ssh-storage-server that we want to access.
+So we fill in the hostname of the storage server, in our example `dt1.f4.htw-berlin.de`.
 
 Next we have to specify the path to the file or directory on our storage server that we want to use.
-In our example it would be `/home/username/test_directory`. We can also use the relative path `test_directory`, which will be interpreted relative to our home directory.
+In our example it would be `/home/s0000000/test_directory`. We can also use the relative path `test_directory`, which will be interpreted relative to our home directory.
 Do not use `~` or environment variables.
 
 Now the CC-Jupyter-Service knows where to find our data (host and path) and the parameter you want to define with it (in our example `my_input_directory`).
 But to access these files we need authentication information.
-So we have to supply our **Username** and **Password** combination we used to login into our SSH-Server.
+So we have to supply our **Username** and **Password** combination we used to login into our SSH-Server (Username should be s0000000).
 
 The last thing to specify is whether we want to copy our directory or to mount it. Most of the time mounting is faster and better, so we tick the checkbox.
 
@@ -168,10 +168,10 @@ The result page lists the executed notebooks and some meta information.
 ![Result Page](https://media.githubusercontent.com/media/curious-containers/cc-jupyter-service.github.io/master/images/result.png)
 
 On the left side we can see the filename of our jupyter notebook. Next to it we see the execution status. There are four possible values for this.
-Notebooks in state `processing` are currently processed. We can update their status by clicking on Results tab of the top navigation bar.
+Notebooks in state `processing` are currently processed. The status is refreshed in short time intervals but we can also update their status by clicking on Results tab of the top navigation bar.
 If everything worked as expected the notebook will have status `success`. Then we can click on the download button on the right side and view our executed notebook.
 If something went wrong the notebook will be in state `failed`. Then we can view some debug information hopefully saying something about the error that occurred.
-On the right side the we can cancel a processing notebook. This will lead to the state `cancelled`.
+On the right side we can cancel a processing notebook. This will lead to state `cancelled`.
 
 If you want to execute another notebook we can switch back to the execution page by clicking on "Execution" at the top navigation bar.
 
@@ -185,6 +185,8 @@ the [Dockerfile-Reference](https://docs.docker.com/engine/reference/builder/).
 
 There are some requirements that our docker image must met so it can be used within CC-Jupyter-Service.
 To make your image work with CC-Jupyter-Service add the following code snippets to your Dockerfile.
+
+Working Dockerfile examples for the predefined docker images can be found [here](https://github.com/curious-containers/cc-jupyter-service/tree/master/docker_images).
 
 ### Install python3, pip, papermill, ipykernel
 First of all make sure python3 and pip is installed:
